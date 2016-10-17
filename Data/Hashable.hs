@@ -68,6 +68,9 @@ module Data.Hashable
     , Hashed
     , hashed
     , unhashed
+    , mapHashed
+    , traverseHashed
+    , joinHashed
     ) where
 
 import Data.String (IsString(..))
@@ -240,3 +243,14 @@ instance (IsString a, Hashable a) => IsString (Hashed a) where
 instance Foldable Hashed where
   foldr f acc (Hashed a _) = f a acc
 
+-- | 'Hashed' cannot be 'Functor'
+mapHashed :: Hashable b => (a -> b) -> Hashed a -> Hashed b
+mapHashed f (Hashed a _) = hashed (f a)
+
+-- | 'Hashed' cannot be 'Traversable'
+traverseHashed :: (Hashable b, Functor f) => (a -> f b) -> Hashed a -> f (Hashed b)
+traverseHashed f (Hashed a _) = fmap hashed (f a)
+
+-- | 'Hashed' cannot be 'Monad'
+joinHashed :: Hashed (Hashed a) -> Hashed a
+joinHashed (Hashed x _) = x
