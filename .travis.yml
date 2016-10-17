@@ -97,6 +97,23 @@ script:
 
 # - cabal test
  - cabal check
+ - cabal install
+
+
+
+ # Try to compile tests and benchmarks, run tests
+ # For some reason doesn't work with old cabal
+ #
+ # Disable tests on GHC 7.6.3 and 7.8.4, as there's something weird happening
+ # because of -inplace and globally installed hashable
+ - if [ ! $CABALVER = "1.16" -a ! $GHCVER = "7.6.3" -a ! $GHCVER = "7.8.4" ]; then
+     cabal install HUnit QuickCheck criterion random siphash test-framework test-framework-hunit test-framework-quickcheck2;
+     cabal configure -v2 --enable-tests --enable-benchmarks;
+   else
+     cabal install HUnit QuickCheck  random test-framework test-framework-hunit test-framework-quickcheck2;
+     cabal configure -v2 --enable-tests;
+   fi
+ - cabal test;
 
  # tests that a source-distribution can be generated
  - cabal sdist
@@ -110,17 +127,5 @@ script:
       echo "expected '$SRC_TGZ' not found";
       exit 1;
    fi;
-   cd ../
-
- # Try to compile tests and benchmarks, run tests
- # For some reason doesn't work with old cabal
- #
- # Disable tests on GHC 7.6.3 and 7.8.4, as there's something weird happening
- # because of -inplace and globally installed hashable
- - if [ ! $CABALVER = "1.16" -a ! $GHCVER = "7.6.3" -a ! $GHCVER = "7.8.4" ]; then
-     cabal install HUnit QuickCheck criterion random siphash test-framework test-framework-hunit test-framework-quickcheck2;
-     cabal configure -v2 --enable-tests --enable-benchmarks;
-     cabal test;
-   fi
 
 # EOF
