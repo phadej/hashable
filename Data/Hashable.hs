@@ -79,6 +79,9 @@ import Data.Hashable.Class
 #ifdef GENERICS
 import Data.Hashable.Generic ()
 #endif
+#if !MIN_VERSION_base(4,8,0)
+import Data.Foldable (Foldable (..))
+#endif
 
 -- $security
 -- #security#
