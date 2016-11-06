@@ -11,17 +11,17 @@ env:
 # - CABALVER=1.16 GHCVER=7.0.1
 # - CABALVER=1.16 GHCVER=7.0.2
 # - CABALVER=1.16 GHCVER=7.0.3
- - CABALVER=1.16 GHCVER=7.0.4
+ - CABALVER=head GHCVER=7.0.4
 # - CABALVER=1.16 GHCVER=7.2.1
- - CABALVER=1.16 GHCVER=7.2.2
+ - CABALVER=head GHCVER=7.2.2
 # - CABALVER=1.16 GHCVER=7.4.1
- - CABALVER=1.16 GHCVER=7.4.2
+ - CABALVER=head GHCVER=7.4.2
 # - CABALVER=1.16 GHCVER=7.6.1
 # - CABALVER=1.16 GHCVER=7.6.2
- - CABALVER=1.18 GHCVER=7.6.3
+ - CABALVER=head GHCVER=7.6.3
 # - CABALVER=1.18 GHCVER=7.8.1
 # - CABALVER=1.18 GHCVER=7.8.2
- - CABALVER=1.18 GHCVER=7.8.4
+ - CABALVER=head GHCVER=7.8.4
  - CABALVER=1.22 GHCVER=7.10.3
  - CABALVER=1.24 GHCVER=8.0.1
 # - CABALVER=head GHCVER=head
@@ -117,10 +117,8 @@ script:
  #
  # Disable tests on GHC 7.6.3 and 7.8.4, as there's something weird happening
  # because of -inplace and globally installed hashable
- - if [ ! $CABALVER = "1.16" -a ! $GHCVER = "7.6.3" -a ! $GHCVER = "7.8.4" ]; then
-     cabal install HUnit QuickCheck criterion random siphash test-framework test-framework-hunit test-framework-quickcheck2;
-     cabal configure -v2 --enable-tests --enable-benchmarks;
-     cabal test;
-   fi
+ - cabal install HUnit QuickCheck criterion random siphash test-framework test-framework-hunit test-framework-quickcheck2;
+ - cabal configure -v2 --enable-tests --enable-benchmarks;
+ - cabal build;
 
 # EOF
